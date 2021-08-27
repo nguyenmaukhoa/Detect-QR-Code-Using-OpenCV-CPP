@@ -45,6 +45,11 @@ int main(){
 	// Disable the code above, and enable the one below to use webcam
 	// VideoCapture cap(0);
 
+	// Create video write object to generate output video
+ 	int frame_width = cap.get(CAP_PROP_FRAME_WIDTH);
+  	int frame_height = cap.get(CAP_PROP_FRAME_HEIGHT);
+	VideoWriter outmp4("../video/output.mp4", VideoWriter::fourcc('F','M','P','4'), 24, Size(frame_width,frame_height));
+
 	// Check the video is loaded sucessfully
 	if(!cap.isOpened()){
 		cout << "Error opening the video..." << endl;
@@ -66,13 +71,17 @@ int main(){
 		// Display QR Code value on the frame
 		display(frame);
 
+		// Write output video with QRCode text 
+		outmp4.write(frame);
+
 		// Stop when ESC key is pressed
 		char c = (char)waitKey(25);
 		if(c == 27)
 			break;
 	}
-	// Release the cap object when done
+	// Release the objects when done
 	cap.release();
+  	outmp4.release();
 
 	// Close all the windows
 	destroyAllWindows();
